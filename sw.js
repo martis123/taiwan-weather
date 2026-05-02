@@ -1,4 +1,4 @@
-const CACHE_NAME = "taiwan-weather-v7";
+const CACHE_NAME = "taiwan-weather-v8";
 const APP_SHELL = [
   "./",
   "./index.html",
