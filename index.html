@@ -4,26 +4,37 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#0f766e" />
-    <meta name="description" content="每日台灣天氣查詢，可安裝到手機主畫面。" />
+    <meta name="description" content="中央氣象署台灣天氣查詢，可安裝到手機主畫面。" />
     <title>每日台灣天氣</title>
-    <link rel="manifest" href="manifest.json" />
+    <link rel="manifest" href="manifest.json?v=4" />
     <link rel="icon" href="icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="icon.svg" />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css?v=4" />
   </head>
   <body>
     <main class="app-shell">
       <section class="weather-panel" aria-labelledby="app-title">
         <div class="topbar">
           <div>
-            <p class="eyebrow">Taiwan Daily Weather</p>
-            <h1 id="app-title">每日台灣天氣</h1>
+            <p class="eyebrow">CWA Taiwan Weather</p>
+            <h1 id="app-title">中央氣象署天氣</h1>
           </div>
           <div class="controls">
             <label for="citySelect">地區</label>
             <select id="citySelect" aria-label="選擇台灣縣市"></select>
           </div>
         </div>
+
+        <section class="auth-card" aria-labelledby="auth-title">
+          <div>
+            <h2 id="auth-title">中央氣象署授權碼</h2>
+            <p>授權碼只會存在這台裝置，用來讀取中央氣象署 OpenData。</p>
+          </div>
+          <div class="auth-actions">
+            <input id="apiKeyInput" type="password" autocomplete="off" placeholder="貼上 Authorization 授權碼" />
+            <button id="saveApiKeyButton" type="button">儲存</button>
+          </div>
+        </section>
 
         <div id="status" class="status" role="status">正在讀取天氣資料...</div>
 
@@ -42,7 +53,7 @@
           </div>
           <dl class="details-grid">
             <div>
-              <dt>體感溫度</dt>
+              <dt>最高溫</dt>
               <dd id="feelsLike"></dd>
             </div>
             <div>
@@ -50,11 +61,11 @@
               <dd id="rainChance"></dd>
             </div>
             <div>
-              <dt>濕度</dt>
+              <dt>最低溫</dt>
               <dd id="humidity"></dd>
             </div>
             <div>
-              <dt>風速</dt>
+              <dt>舒適度</dt>
               <dd id="windSpeed"></dd>
             </div>
           </dl>
@@ -62,7 +73,7 @@
 
         <section aria-labelledby="forecast-title" class="forecast-section">
           <div class="section-heading">
-            <h2 id="forecast-title">未來 7 日</h2>
+            <h2 id="forecast-title">今明 36 小時</h2>
             <div class="action-row">
               <button id="installButton" type="button" hidden>安裝</button>
               <button id="refreshButton" type="button">重新整理</button>
@@ -73,6 +84,6 @@
       </section>
     </main>
 
-    <script src="script.js"></script>
+    <script src="script.js?v=4"></script>
   </body>
 </html>

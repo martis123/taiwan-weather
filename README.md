@@ -1,6 +1,16 @@
 # 每日台灣天氣
 
-可安裝到手機主畫面的台灣天氣 PWA。資料來源為 Open-Meteo，免 API key。
+可安裝到手機主畫面的台灣天氣 PWA。資料來源為中央氣象署 OpenData。
+
+## 中央氣象署授權碼
+
+這個版本使用中央氣象署 `F-C0032-001` 今明 36 小時天氣預報。第一次使用時，請先到中央氣象署開放資料平台申請 Authorization 授權碼：
+
+```text
+https://opendata.cwa.gov.tw/user/authkey
+```
+
+取得後在 App 畫面貼上授權碼並按「儲存」。授權碼只會存在目前裝置的瀏覽器 localStorage。
 
 ## 本機預覽
 

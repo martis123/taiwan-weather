@@ -28,7 +28,8 @@ body {
 }
 
 button,
-select {
+select,
+input {
   font: inherit;
 }
 
@@ -100,6 +101,43 @@ select {
   color: var(--ink);
   background: #fff;
   padding: 0 12px;
+}
+
+input {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--ink);
+  background: #fff;
+  padding: 0 12px;
+}
+
+.auth-card {
+  display: grid;
+  grid-template-columns: 1fr minmax(320px, 0.7fr);
+  gap: 16px;
+  align-items: end;
+  margin-top: 24px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #f8fbfa;
+}
+
+.auth-card h2 {
+  margin-bottom: 6px;
+}
+
+.auth-card p {
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.auth-actions {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
 }
 
 .status {
@@ -207,7 +245,8 @@ dd {
   cursor: pointer;
 }
 
-#installButton {
+#installButton,
+#saveApiKeyButton {
   min-height: 40px;
   border: 1px solid var(--accent);
   border-radius: 8px;
@@ -263,7 +302,7 @@ dd {
   font-size: 0.9rem;
 }
 
-@media (max-width: 760px) {
+@media (max-width: 760px), (hover: none) and (pointer: coarse) {
   .app-shell {
     width: 100%;
     min-height: 100svh;
@@ -295,6 +334,11 @@ dd {
     width: 100%;
   }
 
+  .auth-card,
+  .auth-actions {
+    grid-template-columns: 1fr;
+  }
+
   select {
     min-height: 48px;
     font-size: 1rem;
@@ -324,7 +368,8 @@ dd {
   }
 
   #installButton,
-  #refreshButton {
+  #refreshButton,
+  #saveApiKeyButton {
     width: 100%;
     min-height: 46px;
   }

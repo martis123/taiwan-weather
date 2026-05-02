@@ -1,48 +1,27 @@
 const cities = [
-  { name: "台北市", lat: 25.0375, lon: 121.5637 },
-  { name: "新北市", lat: 25.012, lon: 121.4657 },
-  { name: "基隆市", lat: 25.1276, lon: 121.7392 },
-  { name: "桃園市", lat: 24.9936, lon: 121.301 },
-  { name: "新竹市", lat: 24.8039, lon: 120.9647 },
-  { name: "新竹縣", lat: 24.839, lon: 121.002 },
-  { name: "苗栗縣", lat: 24.5602, lon: 120.8214 },
-  { name: "台中市", lat: 24.1477, lon: 120.6736 },
-  { name: "彰化縣", lat: 24.0685, lon: 120.5575 },
-  { name: "南投縣", lat: 23.9609, lon: 120.9719 },
-  { name: "雲林縣", lat: 23.7092, lon: 120.4313 },
-  { name: "嘉義市", lat: 23.4801, lon: 120.4491 },
-  { name: "嘉義縣", lat: 23.4518, lon: 120.2555 },
-  { name: "台南市", lat: 22.9997, lon: 120.227 },
-  { name: "高雄市", lat: 22.6273, lon: 120.3014 },
-  { name: "屏東縣", lat: 22.5519, lon: 120.5488 },
-  { name: "宜蘭縣", lat: 24.7021, lon: 121.7378 },
-  { name: "花蓮縣", lat: 23.9872, lon: 121.6015 },
-  { name: "台東縣", lat: 22.7972, lon: 121.0714 },
-  { name: "澎湖縣", lat: 23.5711, lon: 119.5793 },
-  { name: "金門縣", lat: 24.4321, lon: 118.3171 },
-  { name: "連江縣", lat: 26.1602, lon: 119.9517 }
+  { displayName: "台北市", cwaName: "臺北市" },
+  { displayName: "新北市", cwaName: "新北市" },
+  { displayName: "基隆市", cwaName: "基隆市" },
+  { displayName: "桃園市", cwaName: "桃園市" },
+  { displayName: "新竹市", cwaName: "新竹市" },
+  { displayName: "新竹縣", cwaName: "新竹縣" },
+  { displayName: "苗栗縣", cwaName: "苗栗縣" },
+  { displayName: "台中市", cwaName: "臺中市" },
+  { displayName: "彰化縣", cwaName: "彰化縣" },
+  { displayName: "南投縣", cwaName: "南投縣" },
+  { displayName: "雲林縣", cwaName: "雲林縣" },
+  { displayName: "嘉義市", cwaName: "嘉義市" },
+  { displayName: "嘉義縣", cwaName: "嘉義縣" },
+  { displayName: "台南市", cwaName: "臺南市" },
+  { displayName: "高雄市", cwaName: "高雄市" },
+  { displayName: "屏東縣", cwaName: "屏東縣" },
+  { displayName: "宜蘭縣", cwaName: "宜蘭縣" },
+  { displayName: "花蓮縣", cwaName: "花蓮縣" },
+  { displayName: "台東縣", cwaName: "臺東縣" },
+  { displayName: "澎湖縣", cwaName: "澎湖縣" },
+  { displayName: "金門縣", cwaName: "金門縣" },
+  { displayName: "連江縣", cwaName: "連江縣" }
 ];
-
-const weatherCodes = {
-  0: ["晴朗", "☀️"],
-  1: ["大致晴朗", "🌤️"],
-  2: ["局部多雲", "⛅"],
-  3: ["陰天", "☁️"],
-  45: ["有霧", "🌫️"],
-  48: ["霧凇", "🌫️"],
-  51: ["毛毛雨", "🌦️"],
-  53: ["毛毛雨", "🌦️"],
-  55: ["毛毛雨", "🌦️"],
-  61: ["小雨", "🌧️"],
-  63: ["雨", "🌧️"],
-  65: ["大雨", "🌧️"],
-  80: ["陣雨", "🌦️"],
-  81: ["陣雨", "🌦️"],
-  82: ["強陣雨", "⛈️"],
-  95: ["雷雨", "⛈️"],
-  96: ["雷雨", "⛈️"],
-  99: ["雷雨", "⛈️"]
-};
 
 const dom = {
   select: document.querySelector("#citySelect"),
@@ -60,17 +39,24 @@ const dom = {
   windSpeed: document.querySelector("#windSpeed"),
   forecastGrid: document.querySelector("#forecastGrid"),
   installButton: document.querySelector("#installButton"),
-  refreshButton: document.querySelector("#refreshButton")
+  refreshButton: document.querySelector("#refreshButton"),
+  apiKeyInput: document.querySelector("#apiKeyInput"),
+  saveApiKeyButton: document.querySelector("#saveApiKeyButton")
 };
 
 const AUTO_REFRESH_MS = 10 * 60 * 1000;
+const API_KEY_STORAGE = "cwaWeatherApiKey";
+const CITY_STORAGE = "selectedTaiwanWeatherCity";
+const CWA_ENDPOINT = "https://opendata.cwa.gov.tw/api/v1/rest/datastore/F-C0032-001";
 let autoRefreshTimer;
 let installPromptEvent;
 
 const dateFormatter = new Intl.DateTimeFormat("zh-TW", {
   month: "numeric",
   day: "numeric",
-  weekday: "short"
+  weekday: "short",
+  hour: "2-digit",
+  minute: "2-digit"
 });
 
 const timeFormatter = new Intl.DateTimeFormat("zh-TW", {
@@ -80,24 +66,29 @@ const timeFormatter = new Intl.DateTimeFormat("zh-TW", {
 });
 
 function setupCityOptions() {
-  const savedCity = localStorage.getItem("selectedTaiwanWeatherCity") || "台北市";
+  const savedCity = localStorage.getItem(CITY_STORAGE) || "臺北市";
 
   cities.forEach((city) => {
     const option = document.createElement("option");
-    option.value = city.name;
-    option.textContent = city.name;
+    option.value = city.cwaName;
+    option.textContent = city.displayName;
     dom.select.append(option);
   });
 
   dom.select.value = savedCity;
 }
 
-function getSelectedCity() {
-  return cities.find((city) => city.name === dom.select.value) || cities[0];
+function setupApiKey() {
+  const savedKey = localStorage.getItem(API_KEY_STORAGE) || "";
+  dom.apiKeyInput.value = savedKey;
 }
 
-function getWeatherInfo(code) {
-  return weatherCodes[code] || ["天氣資料", "🌡️"];
+function getSelectedCity() {
+  return cities.find((city) => city.cwaName === dom.select.value) || cities[0];
+}
+
+function getApiKey() {
+  return dom.apiKeyInput.value.trim();
 }
 
 function setStatus(message, isError = false) {
@@ -114,80 +105,132 @@ function scheduleAutoRefresh() {
   window.clearTimeout(autoRefreshTimer);
   const nextUpdate = new Date(Date.now() + AUTO_REFRESH_MS);
 
-  if (dom.autoUpdateAt) {
-    dom.autoUpdateAt.textContent = `下次自動更新：${timeFormatter.format(nextUpdate)}`;
-  }
-
+  dom.autoUpdateAt.textContent = `下次自動更新：${timeFormatter.format(nextUpdate)}`;
   autoRefreshTimer = window.setTimeout(loadWeather, AUTO_REFRESH_MS);
 }
 
+function getElementMap(location) {
+  return Object.fromEntries(
+    location.weatherElement.map((element) => [element.elementName, element.time])
+  );
+}
+
+function getParameter(timeItem) {
+  return timeItem?.parameter?.parameterName || "--";
+}
+
+function getIcon(condition) {
+  if (condition.includes("雷")) return "⛈️";
+  if (condition.includes("雨")) return "🌧️";
+  if (condition.includes("陰")) return "☁️";
+  if (condition.includes("雲")) return "⛅";
+  if (condition.includes("晴")) return "☀️";
+  return "🌡️";
+}
+
+function formatPeriod(startTime, endTime) {
+  return `${dateFormatter.format(new Date(startTime))} - ${dateFormatter.format(new Date(endTime))}`;
+}
+
 async function loadWeather() {
+  const apiKey = getApiKey();
+
+  if (!apiKey) {
+    dom.current.hidden = true;
+    dom.forecastGrid.replaceChildren();
+    setStatus("請先貼上中央氣象署 OpenData 授權碼，然後按「儲存」。", true);
+    return;
+  }
+
   const city = getSelectedCity();
-  localStorage.setItem("selectedTaiwanWeatherCity", city.name);
-  setStatus(`正在讀取 ${city.name} 天氣資料...`);
+  localStorage.setItem(CITY_STORAGE, city.cwaName);
+  setStatus(`正在讀取中央氣象署 ${city.displayName} 預報...`);
   dom.current.hidden = true;
   dom.forecastGrid.replaceChildren();
 
   const params = new URLSearchParams({
-    latitude: city.lat,
-    longitude: city.lon,
-    timezone: "Asia/Taipei",
-    current: "temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m",
-    daily: "weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max",
-    forecast_days: "7"
+    Authorization: apiKey,
+    format: "JSON",
+    locationName: city.cwaName
   });
 
   try {
-    const response = await fetch(`https://api.open-meteo.com/v1/forecast?${params}`);
+    const response = await fetch(`${CWA_ENDPOINT}?${params}`);
 
     if (!response.ok) {
-      throw new Error("天氣服務暫時無法回應");
+      throw new Error("中央氣象署服務暫時無法回應");
     }
 
     const data = await response.json();
-    renderCurrent(city, data.current);
-    renderForecast(data.daily);
+    const location = data.records?.location?.[0];
+
+    if (!location) {
+      throw new Error("查不到這個縣市的中央氣象署預報資料");
+    }
+
+    renderWeather(city, location);
     hideStatus();
   } catch (error) {
-    setStatus(`${error.message}。請稍後再試，或確認網路連線。`, true);
+    setStatus(`${error.message}。請確認授權碼是否正確，或稍後再試。`, true);
   } finally {
     scheduleAutoRefresh();
   }
 }
 
-function renderCurrent(city, current) {
-  const [condition, icon] = getWeatherInfo(current.weather_code);
+function renderWeather(city, location) {
+  const elements = getElementMap(location);
+  const firstWeather = elements.Wx?.[0];
+  const firstCondition = getParameter(firstWeather);
+  const firstMin = getParameter(elements.MinT?.[0]);
+  const firstMax = getParameter(elements.MaxT?.[0]);
+  const firstRain = getParameter(elements.PoP?.[0]);
+  const firstComfort = getParameter(elements.CI?.[0]);
 
-  dom.cityName.textContent = city.name;
-  dom.updatedAt.textContent = `更新時間：${timeFormatter.format(new Date(current.time))}`;
-  dom.icon.textContent = icon;
-  dom.temperature.textContent = `${Math.round(current.temperature_2m)}°C`;
-  dom.condition.textContent = condition;
-  dom.feelsLike.textContent = `${Math.round(current.apparent_temperature)}°C`;
-  dom.rainChance.textContent = "看下方預報";
-  dom.humidity.textContent = `${current.relative_humidity_2m}%`;
-  dom.windSpeed.textContent = `${Math.round(current.wind_speed_10m)} km/h`;
+  dom.cityName.textContent = city.displayName;
+  dom.updatedAt.textContent = firstWeather
+    ? `預報期間：${formatPeriod(firstWeather.startTime, firstWeather.endTime)}`
+    : "中央氣象署 36 小時預報";
+  dom.icon.textContent = getIcon(firstCondition);
+  dom.temperature.textContent = `${firstMin}° / ${firstMax}°`;
+  dom.condition.textContent = firstCondition;
+  dom.feelsLike.textContent = `${firstMax}°C`;
+  dom.rainChance.textContent = `${firstRain}%`;
+  dom.humidity.textContent = `${firstMin}°C`;
+  dom.windSpeed.textContent = firstComfort;
   dom.current.hidden = false;
+
+  renderForecast(elements);
 }
 
-function renderForecast(daily) {
-  daily.time.forEach((date, index) => {
-    const [condition, icon] = getWeatherInfo(daily.weather_code[index]);
+function renderForecast(elements) {
+  const periods = elements.Wx || [];
+
+  periods.forEach((period, index) => {
+    const condition = getParameter(period);
+    const minT = getParameter(elements.MinT?.[index]);
+    const maxT = getParameter(elements.MaxT?.[index]);
+    const rain = getParameter(elements.PoP?.[index]);
+    const comfort = getParameter(elements.CI?.[index]);
     const card = document.createElement("article");
     card.className = "forecast-card";
     card.innerHTML = `
-      <p class="forecast-date">${dateFormatter.format(new Date(date))}</p>
-      <p class="mini-icon" aria-hidden="true">${icon}</p>
-      <p class="forecast-temp">${Math.round(daily.temperature_2m_min[index])}° / ${Math.round(daily.temperature_2m_max[index])}°</p>
-      <p class="forecast-rain">${condition} · 降雨 ${daily.precipitation_probability_max[index] ?? 0}%</p>
+      <p class="forecast-date">${formatPeriod(period.startTime, period.endTime)}</p>
+      <p class="mini-icon" aria-hidden="true">${getIcon(condition)}</p>
+      <p class="forecast-temp">${minT}° / ${maxT}°</p>
+      <p class="forecast-rain">${condition} · 降雨 ${rain}% · ${comfort}</p>
     `;
     dom.forecastGrid.append(card);
   });
 }
 
 setupCityOptions();
+setupApiKey();
 dom.select.addEventListener("change", loadWeather);
 dom.refreshButton.addEventListener("click", loadWeather);
+dom.saveApiKeyButton.addEventListener("click", () => {
+  localStorage.setItem(API_KEY_STORAGE, getApiKey());
+  loadWeather();
+});
 
 window.addEventListener("beforeinstallprompt", (event) => {
   event.preventDefault();

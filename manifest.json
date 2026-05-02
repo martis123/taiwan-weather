@@ -1,7 +1,7 @@
 {
   "name": "每日台灣天氣",
   "short_name": "台灣天氣",
-  "description": "每日台灣天氣查詢，可安裝到手機主畫面。",
+  "description": "中央氣象署台灣天氣查詢，可安裝到手機主畫面。",
   "start_url": ".",
   "scope": ".",
   "display": "standalone",
