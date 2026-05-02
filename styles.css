@@ -16,10 +16,16 @@
   box-sizing: border-box;
 }
 
+html {
+  width: 100%;
+  overflow-x: hidden;
+}
+
 body {
   width: 100%;
   min-height: 100vh;
   margin: 0;
+  overflow-x: hidden;
   color: var(--ink);
   background:
     linear-gradient(135deg, rgba(15, 118, 110, 0.18), transparent 42%),
@@ -35,6 +41,7 @@ input {
 
 .app-shell {
   width: min(1120px, calc(100% - 32px));
+  max-width: 100%;
   min-height: 100vh;
   margin: 0 auto;
   display: grid;
@@ -43,6 +50,8 @@ input {
 }
 
 .weather-panel {
+  width: 100%;
+  max-width: 100%;
   background: rgba(255, 255, 255, 0.92);
   border: 1px solid rgba(219, 230, 225, 0.9);
   border-radius: 8px;
@@ -58,6 +67,14 @@ input {
   gap: 20px;
 }
 
+.topbar > *,
+.section-heading > *,
+.current-weather > *,
+.auth-card > *,
+.auth-actions > * {
+  min-width: 0;
+}
+
 .eyebrow {
   margin: 0 0 6px;
   color: var(--accent-dark);
@@ -71,6 +88,7 @@ h1,
 h2,
 p {
   margin: 0;
+  overflow-wrap: anywhere;
 }
 
 h1 {
@@ -115,7 +133,7 @@ input {
 
 .auth-card {
   display: grid;
-  grid-template-columns: 1fr minmax(320px, 0.7fr);
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.7fr);
   gap: 16px;
   align-items: end;
   margin-top: 24px;
@@ -158,7 +176,7 @@ input {
 .current-weather {
   margin-top: 28px;
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   gap: 24px;
   align-items: start;
 }
@@ -172,6 +190,7 @@ input {
   margin-top: 8px;
   color: var(--muted);
   font-size: 0.95rem;
+  overflow-wrap: anywhere;
 }
 
 .current-main {
@@ -179,6 +198,7 @@ input {
   align-items: center;
   gap: 16px;
   justify-self: end;
+  min-width: 0;
 }
 
 .weather-icon {
@@ -195,6 +215,7 @@ input {
   font-size: clamp(2.4rem, 6vw, 4.4rem);
   font-weight: 850;
   line-height: 1;
+  overflow-wrap: anywhere;
 }
 
 .condition {
@@ -228,6 +249,7 @@ dd {
   margin: 8px 0 0;
   font-size: 1.2rem;
   font-weight: 800;
+  overflow-wrap: anywhere;
 }
 
 .forecast-section {
@@ -280,12 +302,14 @@ dd {
   min-height: 164px;
   display: grid;
   align-content: space-between;
+  min-width: 0;
 }
 
 .forecast-date {
   color: var(--muted);
   font-size: 0.85rem;
   font-weight: 700;
+  overflow-wrap: anywhere;
 }
 
 .forecast-card .mini-icon {
@@ -295,11 +319,13 @@ dd {
 .forecast-temp {
   font-size: 1.4rem;
   font-weight: 850;
+  overflow-wrap: anywhere;
 }
 
 .forecast-rain {
   color: var(--muted);
   font-size: 0.9rem;
+  overflow-wrap: anywhere;
 }
 
 @media (max-width: 760px), (hover: none) and (pointer: coarse) {
@@ -311,11 +337,13 @@ dd {
   }
 
   .weather-panel {
+    width: 100%;
+    max-width: 100vw;
     min-height: 100svh;
     border: 0;
     border-radius: 0;
     box-shadow: none;
-    padding: 18px 14px 28px;
+    padding: calc(16px + env(safe-area-inset-top)) 12px calc(24px + env(safe-area-inset-bottom));
   }
 
   .topbar,
@@ -326,7 +354,7 @@ dd {
   }
 
   h1 {
-    font-size: 2.15rem;
+    font-size: clamp(1.75rem, 8vw, 2.15rem);
   }
 
   .controls {
@@ -339,6 +367,11 @@ dd {
     grid-template-columns: 1fr;
   }
 
+  .auth-card {
+    margin-top: 16px;
+    padding: 14px;
+  }
+
   select {
     min-height: 48px;
     font-size: 1rem;
@@ -346,12 +379,29 @@ dd {
 
   .current-main {
     width: 100%;
+    max-width: 100%;
     justify-self: start;
     justify-content: space-between;
     border: 1px solid var(--line);
     border-radius: 8px;
     background: #fbfdfc;
     padding: 14px;
+  }
+
+  .weather-icon {
+    width: 64px;
+    height: 64px;
+    flex: 0 0 auto;
+    font-size: 2.25rem;
+  }
+
+  .temperature {
+    font-size: clamp(2rem, 12vw, 3rem);
+    text-align: right;
+  }
+
+  .condition {
+    text-align: right;
   }
 
   .details-grid {
@@ -381,7 +431,7 @@ dd {
 
   .forecast-card {
     min-height: 0;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
     gap: 8px 12px;
   }
@@ -397,8 +447,17 @@ dd {
 }
 
 @media (max-width: 460px) {
+  .weather-panel {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .details-grid {
+    gap: 10px;
+  }
+
   .details-grid div {
-    padding: 14px;
+    padding: 12px;
   }
 
   dd {
