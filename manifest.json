@@ -1,0 +1,20 @@
+{
+  "name": "每日台灣天氣",
+  "short_name": "台灣天氣",
+  "description": "每日台灣天氣查詢，可安裝到手機主畫面。",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "background_color": "#eef5f2",
+  "theme_color": "#0f766e",
+  "orientation": "portrait-primary",
+  "lang": "zh-Hant-TW",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

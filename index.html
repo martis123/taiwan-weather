@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0f766e" />
+    <meta name="description" content="每日台灣天氣查詢，可安裝到手機主畫面。" />
+    <title>每日台灣天氣</title>
+    <link rel="manifest" href="manifest.json" />
+    <link rel="icon" href="icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="icon.svg" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="weather-panel" aria-labelledby="app-title">
+        <div class="topbar">
+          <div>
+            <p class="eyebrow">Taiwan Daily Weather</p>
+            <h1 id="app-title">每日台灣天氣</h1>
+          </div>
+          <div class="controls">
+            <label for="citySelect">地區</label>
+            <select id="citySelect" aria-label="選擇台灣縣市"></select>
+          </div>
+        </div>
+
+        <div id="status" class="status" role="status">正在讀取天氣資料...</div>
+
+        <section id="currentWeather" class="current-weather" hidden>
+          <div>
+            <p id="cityName" class="city-name"></p>
+            <p id="updatedAt" class="updated-at"></p>
+            <p id="autoUpdateAt" class="updated-at"></p>
+          </div>
+          <div class="current-main">
+            <span id="weatherIcon" class="weather-icon" aria-hidden="true"></span>
+            <div>
+              <p id="temperature" class="temperature"></p>
+              <p id="condition" class="condition"></p>
+            </div>
+          </div>
+          <dl class="details-grid">
+            <div>
+              <dt>體感溫度</dt>
+              <dd id="feelsLike"></dd>
+            </div>
+            <div>
+              <dt>降雨機率</dt>
+              <dd id="rainChance"></dd>
+            </div>
+            <div>
+              <dt>濕度</dt>
+              <dd id="humidity"></dd>
+            </div>
+            <div>
+              <dt>風速</dt>
+              <dd id="windSpeed"></dd>
+            </div>
+          </dl>
+        </section>
+
+        <section aria-labelledby="forecast-title" class="forecast-section">
+          <div class="section-heading">
+            <h2 id="forecast-title">未來 7 日</h2>
+            <div class="action-row">
+              <button id="installButton" type="button" hidden>安裝</button>
+              <button id="refreshButton" type="button">重新整理</button>
+            </div>
+          </div>
+          <div id="forecastGrid" class="forecast-grid"></div>
+        </section>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
