@@ -6,10 +6,10 @@
     <meta name="theme-color" content="#0f766e" />
     <meta name="description" content="中央氣象署台灣天氣查詢，可安裝到手機主畫面。" />
     <title>每日台灣天氣</title>
-    <link rel="manifest" href="manifest.json?v=6" />
+    <link rel="manifest" href="manifest.json?v=7" />
     <link rel="icon" href="icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="icon.svg" />
-    <link rel="stylesheet" href="styles.css?v=6" />
+    <link rel="stylesheet" href="styles.css?v=7" />
   </head>
   <body>
     <main class="app-shell">
@@ -19,13 +19,16 @@
             <p class="eyebrow">CWA Taiwan Weather</p>
             <h1 id="app-title">中央氣象署天氣</h1>
           </div>
-          <div class="controls">
-            <label for="citySelect">地區</label>
-            <select id="citySelect" aria-label="選擇台灣縣市"></select>
+          <div class="top-actions">
+            <div class="controls">
+              <label for="citySelect">地區</label>
+              <select id="citySelect" aria-label="選擇台灣縣市"></select>
+            </div>
+            <button id="settingsButton" class="icon-button" type="button" aria-expanded="false" aria-controls="authCard" title="設定">⚙</button>
           </div>
         </div>
 
-        <section class="auth-card" aria-labelledby="auth-title">
+        <section id="authCard" class="auth-card" aria-labelledby="auth-title" hidden>
           <div>
             <h2 id="auth-title">中央氣象署授權碼</h2>
             <p>授權碼只會存在這台裝置，用來讀取中央氣象署 OpenData。</p>
@@ -84,6 +87,6 @@
       </section>
     </main>
 
-    <script src="script.js?v=6"></script>
+    <script src="script.js?v=7"></script>
   </body>
 </html>

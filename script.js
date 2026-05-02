@@ -40,6 +40,8 @@ const dom = {
   forecastGrid: document.querySelector("#forecastGrid"),
   installButton: document.querySelector("#installButton"),
   refreshButton: document.querySelector("#refreshButton"),
+  settingsButton: document.querySelector("#settingsButton"),
+  authCard: document.querySelector("#authCard"),
   apiKeyInput: document.querySelector("#apiKeyInput"),
   saveApiKeyButton: document.querySelector("#saveApiKeyButton")
 };
@@ -81,6 +83,8 @@ function setupCityOptions() {
 function setupApiKey() {
   const savedKey = localStorage.getItem(API_KEY_STORAGE) || "";
   dom.apiKeyInput.value = savedKey;
+  dom.authCard.hidden = Boolean(savedKey);
+  dom.settingsButton.setAttribute("aria-expanded", String(!dom.authCard.hidden));
 }
 
 function getSelectedCity() {
@@ -138,6 +142,8 @@ async function loadWeather() {
   if (!apiKey) {
     dom.current.hidden = true;
     dom.forecastGrid.replaceChildren();
+    dom.authCard.hidden = false;
+    dom.settingsButton.setAttribute("aria-expanded", "true");
     setStatus("請先貼上中央氣象署 OpenData 授權碼，然後按「儲存」。", true);
     return;
   }
@@ -227,8 +233,14 @@ setupCityOptions();
 setupApiKey();
 dom.select.addEventListener("change", loadWeather);
 dom.refreshButton.addEventListener("click", loadWeather);
+dom.settingsButton.addEventListener("click", () => {
+  dom.authCard.hidden = !dom.authCard.hidden;
+  dom.settingsButton.setAttribute("aria-expanded", String(!dom.authCard.hidden));
+});
 dom.saveApiKeyButton.addEventListener("click", () => {
   localStorage.setItem(API_KEY_STORAGE, getApiKey());
+  dom.authCard.hidden = true;
+  dom.settingsButton.setAttribute("aria-expanded", "false");
   loadWeather();
 });
 
