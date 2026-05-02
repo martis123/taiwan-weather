@@ -17,6 +17,7 @@
 }
 
 body {
+  width: 100%;
   min-height: 100vh;
   margin: 0;
   color: var(--ink);
@@ -264,28 +265,98 @@ dd {
 
 @media (max-width: 760px) {
   .app-shell {
-    width: min(100% - 20px, 1120px);
+    width: 100%;
+    min-height: 100svh;
     align-items: start;
-    padding-top: 10px;
+    padding: 0;
+  }
+
+  .weather-panel {
+    min-height: 100svh;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 18px 14px 28px;
   }
 
   .topbar,
   .current-weather,
   .section-heading {
     display: grid;
+    gap: 14px;
+  }
+
+  h1 {
+    font-size: 2.15rem;
+  }
+
+  .controls {
+    min-width: 0;
+    width: 100%;
+  }
+
+  select {
+    min-height: 48px;
+    font-size: 1rem;
   }
 
   .current-main {
+    width: 100%;
     justify-self: start;
+    justify-content: space-between;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #fbfdfc;
+    padding: 14px;
   }
 
   .details-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .section-heading {
+    grid-template-columns: 1fr;
+  }
+
+  .action-row {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  #installButton,
+  #refreshButton {
+    width: 100%;
+    min-height: 46px;
+  }
+
+  .forecast-grid {
+    grid-template-columns: 1fr;
+    overflow-x: visible;
+  }
+
+  .forecast-card {
+    min-height: 0;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 8px 12px;
+  }
+
+  .forecast-card .mini-icon {
+    grid-row: span 2;
+    justify-self: end;
+  }
+
+  .forecast-rain {
+    grid-column: 1 / -1;
+  }
 }
 
 @media (max-width: 460px) {
-  .details-grid {
-    grid-template-columns: 1fr;
+  .details-grid div {
+    padding: 14px;
+  }
+
+  dd {
+    font-size: 1.08rem;
   }
 }
